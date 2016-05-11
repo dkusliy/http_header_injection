@@ -221,8 +221,9 @@ class CrlfInj:
             try:
                 r = requests.get(uri, headers = self.headers, timeout = 10)
                 for test in self.test_params:
-                    if test in r.url:
-                        logging.warning(bcolors.OKBLUE + "uri (%s) - test (%s) - HTTP status_code (%s)" + bcolors.ENDC, uri, test, str(r.status_code))
+                    if len(r.history):
+                        if test in r.url:
+                            logging.warning(bcolors.OKBLUE + "uri (%s) - test (%s) - HTTP status_code (%s)" + bcolors.ENDC, uri, test, str(r.status_code))
                     for http_header in r.headers:
                         if test in http_header:
                             logging.warning(bcolors.OKBLUE + "uri (%s) - test (%s) - HTTP status_code (%s)" + bcolors.ENDC, uri, test, str(r.status_code))
