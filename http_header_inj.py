@@ -206,6 +206,9 @@ class CrlfInj:
                     self.tmpl.append('/' + line.strip() + '/../')
                     self.tmpl.append('/' + line.strip() + '/%2e%2e/')
 
+                    self.tmpl.append('/invite?' + line.strip())
+                    self.tmpl.append('/badges?' + line.strip())
+
                     self.tmpl.append('/?' + line.strip() + 'example.com')
                     self.tmpl.append('/xxx' + line.strip() + 'example.com')
                     self.tmpl.append('/' + line.strip() + 'example.com')
@@ -219,7 +222,7 @@ class CrlfInj:
         for template in self.tmpl:
             uri = url + template
             try:
-                r = requests.get(uri, headers = self.headers, timeout = 10)
+                r = requests.get(uri, headers = self.headers, timeout = 10, allow_redirects=False)
                 for test in self.test_params:
                     if len(r.history):
                         if test in r.url:
@@ -256,7 +259,7 @@ def main():
     crlf = CrlfInj()
     crlf.prepare()
 
-
+    temp = []
     # read file with DNS answer
     for line in Params.file:
         if Params.type == 'D':
@@ -269,12 +272,16 @@ def main():
         p = re.compile(re_tmpl)
         match = re.search(p, domain)
         if match:
+            #print match.group(2)
             domain = match.group(2)
-            logging.warning(bcolors.BOLD + "domain: (%s)" + bcolors.ENDC, domain)
-            url = 'http://' + domain
-            #crlf.do_it(url)
-            url = 'https://' + domain
-            crlf.do_it(url)
+            if domain not in temp:
+                #print domain
+                temp.append(domain)
+                logging.warning(bcolors.BOLD + "domain: (%s)" + bcolors.ENDC, domain)
+                # url = 'http://' + domain
+                # crlf.do_it(url)
+                url = 'https://' + domain
+                crlf.do_it(url)
 
 
 if __name__ == "__main__":
